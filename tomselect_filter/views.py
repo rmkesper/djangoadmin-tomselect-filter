@@ -7,7 +7,7 @@ from django.http import JsonResponse
 def lookup_view(request):
     model_str = request.GET.get("model")
     field = request.GET.get("field")
-    q = request.GET.get("q", "") # TODO multiple values
+    q = request.GET.get("q", "")  # TODO multiple values
 
     if not model_str or not field:
         return JsonResponse([], safe=False)
@@ -19,5 +19,5 @@ def lookup_view(request):
     if q:
         queryset = queryset.filter(**{f"{field}__icontains": q})
 
-    results = [{"value": val, "label": str(val)} for val in queryset[:20]] # TODO limit
+    results = [{"value": val, "label": str(val)} for val in queryset[:20]]  # TODO limit
     return JsonResponse(results, safe=False)

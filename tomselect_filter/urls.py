@@ -1,4 +1,5 @@
 from django.urls import path
+
 from .views import lookup_view
 
 app_name = "tomselect_filter"

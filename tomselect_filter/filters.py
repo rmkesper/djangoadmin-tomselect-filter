@@ -1,7 +1,6 @@
+from django.contrib.admin.filters import FieldListFilter
 from django.urls import reverse
 
-
-from django.contrib.admin.filters import FieldListFilter
 
 class TomSelectListFilter(FieldListFilter):
     template = "admin/filters/tomselect_filter.html"
@@ -23,4 +22,7 @@ class TomSelectListFilter(FieldListFilter):
         return self.title
 
     def get_lookup_url(self):
-        return reverse("tomselect_filter:lookup") + f"?model={self.model._meta.app_label}.{self.model._meta.model_name}&field={self.parameter_name}"
+        return (
+            reverse("tomselect_filter:lookup")
+            + f"?model={self.model._meta.app_label}.{self.model._meta.model_name}&field={self.parameter_name}"
+        )
