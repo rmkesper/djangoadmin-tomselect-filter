@@ -1,7 +1,4 @@
-from django.contrib.admin import SimpleListFilter
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
-from django.db.models import Field
 
 
 from django.contrib.admin.filters import FieldListFilter
