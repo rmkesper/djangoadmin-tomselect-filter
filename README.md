@@ -1,4 +1,5 @@
 ## Multiselect filter for django admin
 
-![image](https://github.com/user-attachments/assets/33710243-d74f-4572-b49f-eef7c35253da)
+![image](https://github.com/user-attachments/assets/19b46d71-bd42-416f-9b6d-5da72c54e274)
+
 
