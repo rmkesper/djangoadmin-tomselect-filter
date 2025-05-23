@@ -42,7 +42,10 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    const initialValues = getUrlParameter(param);  // adjust param name
+    let initialValues = getUrlParameter(param);
+    if (initialValues.length == 1) {
+        initialValues = initialValues[0].split(",")
+    }
     if (initialValues.length > 0) {
       const url = select.input.getAttribute('data-url');
       fetch(`${url}&q=${initialValues.join(',')}`) // TODO
