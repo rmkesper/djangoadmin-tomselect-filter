@@ -4,6 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
     return urlParams.getAll(name);
   }
 
+  if (!window.tomselect_query) {
+    window.tomselect_query = ""
+  }
+
   document.querySelectorAll(".tom-select-filter").forEach((el) => {
     const url = el.dataset.url;
     const param = el.dataset.param;
@@ -12,10 +16,10 @@ document.addEventListener("DOMContentLoaded", function () {
       valueField: "value",
       labelField: "label",
       searchField: "label",
+      create: false,
       plugins: ['remove_button'],
       load: function (query, callback) {
         const fullUrl = `${url}&q=${encodeURIComponent(query)}`;
-        console.log({fullUrl})
         fetch(fullUrl)
           .then((res) => res.json())
           .then((json) => callback(json))
@@ -29,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
           searchParams.delete(param);
         }
-        window.location.search = searchParams.toString();
+        window.tomselect_query = searchParams.toString();
       },
       onFocus: function() {
         if (!this.input.value && this.items.length === 0) {
@@ -44,16 +48,23 @@ document.addEventListener("DOMContentLoaded", function () {
       fetch(`${url}&q=${initialValues.join(',')}`) // TODO
         .then(res => res.json())
         .then(data => {
-          // Add the initial options so Tom Select can render labels
           data.forEach(item => {
             // add option if not already present
             if (!select.options.hasOwnProperty(item.value)) {
               select.addOption(item);
             }
           });
-          // set selected values
           select.setValue(initialValues);
         });
+    }
+
+    const submit_btn = document.querySelector(`#submit_${param}`);
+    if (submit_btn) {
+      submit_btn.addEventListener("click", function () {
+        if (window.tomselect_query) {
+          window.location.search = window.tomselect_query;
+        }
+      });
     }
   });
 });

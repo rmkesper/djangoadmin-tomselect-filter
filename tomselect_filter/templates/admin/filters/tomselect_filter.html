@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <div style="padding: 0.5rem">
   <label>
     <span>{{ spec.get_title }}</span>
@@ -8,4 +10,5 @@
       multiple
     ></select>
   </label>
+  <button id="submit_{{ spec.parameter_name }}">{% translate "Submit" %}</button>
 </div>
