@@ -7,8 +7,12 @@
       class="tom-select-filter"
       data-url="{{ spec.get_lookup_url }}"
       data-param="{{ spec.parameter_name }}"
+      style="margin-top: 0.25rem"
       multiple
     ></select>
   </label>
-  <button id="submit_{{ spec.parameter_name }}">{% translate "Submit" %}</button>
+  <button style="width: 100%; border: 1px solid gray; border-radius: 0.125rem; height: 1.65rem; margin-top: 0.25rem"
+          id="submit_{{ spec.parameter_name }}">
+    {% translate "Submit" %}
+  </button>
 </div>

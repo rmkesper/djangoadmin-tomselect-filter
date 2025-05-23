@@ -28,11 +28,10 @@ document.addEventListener("DOMContentLoaded", function () {
       onChange: function () {
         const values = el.tomselect.getValue();
         const searchParams = new URLSearchParams(window.location.search);
-        if (values.length) {
-          searchParams.set(param, values.join(","));
-        } else {
-          searchParams.delete(param);
-        }
+        searchParams.delete(param);
+        values.forEach(val => {
+          searchParams.append(param, val);
+        });
         window.tomselect_query = searchParams.toString();
       },
       onFocus: function() {
@@ -48,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     if (initialValues.length > 0) {
       const url = select.input.getAttribute('data-url');
-      fetch(`${url}&q=${initialValues.join(',')}`) // TODO
+      fetch(`${url}&q=${initialValues.join(',')}`)
         .then(res => res.json())
         .then(data => {
           data.forEach(item => {
