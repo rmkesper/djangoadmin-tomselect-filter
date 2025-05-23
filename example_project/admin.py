@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from tomselect_filter.filters import TomSelectListFilter
 
-from .models import Product
+from .models import Inventory, Item, Product
 
 
 class CategoryFilter(TomSelectListFilter):
@@ -16,6 +16,20 @@ class CategoryFilter(TomSelectListFilter):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_filter = [("category", CategoryFilter)]
+    search_fields = ["name"]
+
+
+@admin.register(Item)
+class ItemAdmin(admin.ModelAdmin):
+    search_fields = ["name"]
+
+
+@admin.register(Inventory)
+class InventoryAdmin(admin.ModelAdmin):
+    search_fields = ["name"]
+    filter_horizontal = [
+        "products",
+    ]
 
 
 class CustomUserAdmin(DefaultUserAdmin):

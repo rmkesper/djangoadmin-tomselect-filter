@@ -1,0 +1,75 @@
+[
+{
+  "model": "example_project.product",
+  "pk": 1,
+  "fields": {
+    "name": "Product 1",
+    "category": "Cat. 1"
+  }
+},
+{
+  "model": "example_project.product",
+  "pk": 2,
+  "fields": {
+    "name": "Product 2",
+    "category": "Cat. 1"
+  }
+},
+{
+  "model": "example_project.product",
+  "pk": 3,
+  "fields": {
+    "name": "Product 3",
+    "category": "Cat. 2"
+  }
+},
+{
+  "model": "example_project.item",
+  "pk": 1,
+  "fields": {
+    "name": "Item 1",
+    "product": 1
+  }
+},
+{
+  "model": "example_project.item",
+  "pk": 2,
+  "fields": {
+    "name": "Item 2",
+    "product": 3
+  }
+},
+{
+  "model": "example_project.inventory",
+  "pk": 1,
+  "fields": {
+    "name": "All",
+    "products": [
+      1,
+      2,
+      3
+    ]
+  }
+},
+{
+  "model": "example_project.inventory",
+  "pk": 2,
+  "fields": {
+    "name": "Some",
+    "products": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "example_project.inventory",
+  "pk": 3,
+  "fields": {
+    "name": "One",
+    "products": [
+      3
+    ]
+  }
+}
+]

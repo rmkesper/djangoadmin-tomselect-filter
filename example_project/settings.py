@@ -31,7 +31,7 @@ ALLOWED_HOSTS: list[str] = []
 # Application definition
 
 INSTALLED_APPS = [
-    "test_app",
+    "example_project",
     "tomselect_filter",
     "django.contrib.admin",
     "django.contrib.auth",
