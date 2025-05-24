@@ -22,6 +22,31 @@ class InventoryFilter(TomSelectListFilter):
     def get_title(self):
         return _("By Inventory")
 
+    def get_mode(self):
+        return "pk__in"
+
+
+class ItemProductFilter(TomSelectListFilter):
+    def get_title(self):
+        return _("By Products")
+
+    def get_mode(self):
+        return "pk"
+
+    def get_model(self):
+        return Product
+
+
+class InventoryProductFilter(TomSelectListFilter):
+    def get_title(self):
+        return _("By Products")
+
+    def get_mode(self):
+        return "pk"
+
+    def get_model(self):
+        return Product
+
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -33,7 +58,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = [
         ("category", CategoryFilter),
         ("items__name", ItemFilter),
-        ("inventory__name", InventoryFilter),
+        ("inventory", InventoryFilter),
     ]
     search_fields = ["name"]
 
@@ -42,12 +67,20 @@ class ProductAdmin(admin.ModelAdmin):
 class ItemAdmin(admin.ModelAdmin):
     search_fields = ["name"]
 
+    list_filter = [
+        ("product", ItemProductFilter),
+    ]
+
 
 @admin.register(Inventory)
 class InventoryAdmin(admin.ModelAdmin):
     search_fields = ["name"]
     filter_horizontal = [
         "products",
+    ]
+
+    list_filter = [
+        ("products", InventoryProductFilter),
     ]
 
 
