@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
+from django.utils.translation import gettext_lazy as _
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,6 +29,19 @@ DEBUG = True
 
 ALLOWED_HOSTS: list[str] = []
 
+USE_I18N = True
+LOCALE_PATHS: list[str] = []
+
+LANGUAGE_CODE = "en-gb"
+LANGUAGES = [
+    ("en-gb", _("English")),
+    ("de-ch", _("German")),
+    ("fr-fr", _("French")),
+    ("it-it", _("Italian")),
+    ("es-es", _("Spanish")),
+    ("ru-ru", _("Russian")),
+    ("zh-hans", _("Chinese")),
+]
 
 # Application definition
 
@@ -44,6 +59,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
