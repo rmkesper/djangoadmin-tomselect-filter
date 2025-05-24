@@ -10,12 +10,31 @@ from .models import Inventory, Item, Product
 
 class CategoryFilter(TomSelectListFilter):
     def get_title(self):
-        return _("My Title")
+        return _("By Categories")
+
+
+class ItemFilter(TomSelectListFilter):
+    def get_title(self):
+        return _("By Items")
+
+
+class InventoryFilter(TomSelectListFilter):
+    def get_title(self):
+        return _("By Inventory")
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_filter = [("category", CategoryFilter)]
+    list_display = [
+        "name",
+        "category",
+    ]
+
+    list_filter = [
+        ("category", CategoryFilter),
+        ("items__name", ItemFilter),
+        ("inventory__name", InventoryFilter),
+    ]
     search_fields = ["name"]
 
 

@@ -23,5 +23,5 @@ def lookup_view(request):
             filter_set |= Q(**{f"{field}__icontains": term})
         queryset = queryset.filter(filter_set)
 
-    results = [{"value": val, "label": str(val)} for val in queryset[:20]]  # TODO limit
+    results = [{"value": val, "label": str(val)} for val in queryset]  # TODO limit
     return JsonResponse(results, safe=False)
