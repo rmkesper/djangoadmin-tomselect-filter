@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.querySelectorAll(".tom-select-filter").forEach((el) => {
     const url = el.dataset.url;
-    const mode = el.dataset.mode;
     const param = el.dataset.param;
 
     const select = new TomSelect(el, {
@@ -20,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
       create: false,
       plugins: ['remove_button'],
       load: function (query, callback) {
-        const fullUrl = `${url}&q=${encodeURIComponent(query)}&mode=${mode}`;
+        const fullUrl = `${url}&q=${encodeURIComponent(query)}`;
         fetch(fullUrl)
           .then((res) => res.json())
           .then((json) => callback(json))
@@ -48,8 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     if (initialValues.length > 0) {
       const url = select.input.getAttribute('data-url');
-      const mode = select.input.getAttribute('data-mode');
-      fetch(`${url}&q=${initialValues.join(',')}&mode=${mode}`)
+      fetch(`${url}&q=${initialValues.join(',')}`)
         .then(res => res.json())
         .then(data => {
           data.forEach(item => {

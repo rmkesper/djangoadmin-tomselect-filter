@@ -9,8 +9,13 @@ from django.http import JsonResponse
 def lookup_view(request):
     model_str = request.GET.get("model")
     field = request.GET.get("field")
-    mode = request.GET.get("mode", "icontains")
     q = request.GET.get("q", "")
+    is_pk_field = (
+        field.endswith("pk")
+        or field.endswith("pk__in")
+        or field.endswith("id")
+        or field.endswith("id__in")
+    )
 
     if not model_str or not field:
         return JsonResponse([], safe=False)
@@ -19,24 +24,22 @@ def lookup_view(request):
     model = apps.get_model(app_label, model_name)
 
     queryset = (
-        model.objects.values_list(field, flat=True).distinct()
-        if "contains" in mode
-        else model.objects.all()
+        model.objects.all()
+        if is_pk_field
+        else model.objects.values_list(field, flat=True).distinct()
     )
+    filter_spec = "" if is_pk_field else "__icontains"
     if q:
         filter_set = Q()
         for term in q.split(","):
-            filter_set |= Q(**{f"{field}__{mode}": term})
+            filter_set |= Q(**{f"{field}{filter_spec}": term})
         try:
             queryset = queryset.filter(filter_set)
         except FieldError:
-            filter_set = Q()
-            for term in q.split(","):
-                filter_set |= Q(**{"pk": int(term)})
-            queryset = queryset.filter(filter_set)
+            pass
 
     results = [
-        {"value": str(val) if "contains" in mode else val.pk, "label": str(val)}
+        {"value": val.pk if is_pk_field else str(val), "label": str(val)}
         for val in queryset
         if val is not None
     ]

@@ -27,13 +27,10 @@ class TomSelectListFilter(FieldListFilter):
     def get_model(self):
         return self.model
 
-    def get_mode(self):
-        return self.mode
-
     def get_lookup_url(self):
         app_label = self.get_model()._meta.app_label
         model_name = self.get_model()._meta.model_name
         return (
             reverse("tomselect_filter:lookup")
-            + f"?model={app_label}.{model_name}&field={self.parameter_name}&mode={self.mode}"
+            + f"?model={app_label}.{model_name}&field={self.parameter_name}"
         )

@@ -58,7 +58,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = [
         ("category", CategoryFilter),
         ("items__name", ItemFilter),
-        ("inventory", InventoryFilter),
+        ("inventory__products__id", InventoryFilter),
     ]
     search_fields = ["name"]
 
@@ -68,7 +68,7 @@ class ItemAdmin(admin.ModelAdmin):
     search_fields = ["name"]
 
     list_filter = [
-        ("product", ItemProductFilter),
+        ("product__pk", ItemProductFilter),
     ]
 
 
@@ -80,7 +80,7 @@ class InventoryAdmin(admin.ModelAdmin):
     ]
 
     list_filter = [
-        ("products", InventoryProductFilter),
+        ("products__pk", InventoryProductFilter),
     ]
 
 
