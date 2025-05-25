@@ -1,45 +1,12 @@
-from urllib.parse import parse_qs, urlparse
-
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DefaultUserAdmin
 from django.contrib.auth.models import User
-from django.core.exceptions import FieldError
-from django.db.models import Q, QuerySet
 from django.http import JsonResponse
 from django.utils.translation import gettext_lazy as _
 
 from tomselect_filter.filters import TomSelectListFilter
 
 from .models import AccountingYear, Inventory, Item, Product
-
-
-class AbstractAdminQueryFilter:
-    def get_extend_queryset(
-        self, term=None, queryset=None, admin_query: str | None = None, *args, **kwargs
-    ) -> QuerySet:
-        """
-        Demo use of extend queryset option with access of the current admin queryset.
-
-        Parse the current admin parameters and attach it to the current queryset.
-        -> return the dropdownlist of the tomselect filtered by current selection
-        """
-
-        if isinstance(admin_query, str):
-            query_string = urlparse(admin_query).query
-            params = parse_qs(query_string)
-            filter_set = Q()
-            for k, v in params.items():
-                if isinstance(v, list):
-                    for e in v:
-                        filter_set |= Q(**{f"{k}": e})
-                else:
-                    filter_set &= Q(**{f"{k}": v})
-
-            try:
-                queryset = queryset.filter(filter_set)
-            except (FieldError, LookupError):
-                pass
-        return queryset
 
 
 class AccountingYearFilter(TomSelectListFilter):
@@ -49,8 +16,11 @@ class AccountingYearFilter(TomSelectListFilter):
     def get_model(self):
         return AccountingYear
 
+    def get_admin_model(self):
+        return AccountingYear
 
-class CategoryFilter(AbstractAdminQueryFilter, TomSelectListFilter):
+
+class CategoryFilter(TomSelectListFilter):
     def get_title(self):
         return _("By Categories")
 

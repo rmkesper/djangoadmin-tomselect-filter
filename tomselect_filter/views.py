@@ -95,14 +95,32 @@ def lookup_view(request):
         )
 
     filter_spec = "" if is_pk_field else "__icontains"
+    # TODO refactor this logic to make it clearer
     if q:
-        filter_set = Q()
-        for term in q.split(","):
-            filter_set |= Q(**{f"{field}{filter_spec}": term})
-        try:
-            queryset = queryset.filter(filter_set)
-        except FieldError:
-            pass
+        if model_str == admin_model_str or (
+            model_str != admin_model_str and not is_pk_field
+        ):
+            filter_set = Q()
+            for term in q.split(","):
+                filter_set |= Q(**{f"{field}{filter_spec}": term})
+            try:
+                queryset = queryset.filter(filter_set)
+            except FieldError:
+                pass
+        else:
+            queryset = {
+                item
+                for qs in queryset
+                for item in getattr(qs, field.replace("__id", "")).all()
+            }
+    elif is_pk_field:
+        queryset = {
+            item
+            for qs in queryset
+            for item in getattr(qs, field.replace("__id", "")).all()
+        }
+    else:
+        queryset = queryset.values_list(field, flat=True).distinct()
 
     results = [
         # check if we should return ID or str for the value

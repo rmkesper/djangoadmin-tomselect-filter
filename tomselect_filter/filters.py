@@ -1,5 +1,8 @@
+from urllib.parse import parse_qs, urlparse
+
 from django.contrib.admin.filters import FieldListFilter
-from django.db.models import QuerySet
+from django.core.exceptions import FieldError
+from django.db.models import Q, QuerySet
 from django.http import JsonResponse
 from django.urls import reverse
 
@@ -41,7 +44,6 @@ class TomSelectListFilter(FieldListFilter):
     ) -> JsonResponse:
         """
         Override the default queryset handling if needed.
-
         Either use extend queryset OR custom queryset!
         """
         return None
@@ -51,10 +53,30 @@ class TomSelectListFilter(FieldListFilter):
     ) -> QuerySet:
         """
         Extend the default queryset if needed.
-
         Either use extend queryset OR custom queryset!
+
+        Below gets the queryset for the tomselect options filtered by the current available
+        options in the related django admin view. either use super().get_extend_queryset(...)
+        to maintain this or override if needed.
         """
-        return None
+        if isinstance(admin_query, str) and queryset:
+            query_string = urlparse(admin_query).query
+            params = parse_qs(query_string)
+            filter_set = Q()
+            for k, v in params.items():
+                if isinstance(v, list):
+                    sub_filterset = Q()
+                    for e in v:
+                        sub_filterset |= Q(**{f"{k}": e})
+                    filter_set &= Q(sub_filterset)
+                else:
+                    filter_set &= Q(**{f"{k}": v})
+
+            try:
+                queryset = queryset.filter(filter_set)
+            except (FieldError, LookupError):
+                pass
+        return queryset
 
     def get_lookup_url(self):
         app_label = self.get_model()._meta.app_label
