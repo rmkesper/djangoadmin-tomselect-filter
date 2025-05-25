@@ -10,6 +10,7 @@ class TomSelectListFilter(FieldListFilter):
         self.field = field
         self.model = model
         self.parameter_name = field_path
+        self.admin_model = model
         self.title = (
             field.verbose_name.title() if getattr(field, "verbose_name", None) else ""
         )
@@ -25,12 +26,23 @@ class TomSelectListFilter(FieldListFilter):
         return self.title
 
     def get_model(self):
+        """The lookup model for reference."""
         return self.model
+
+    def get_admin_model(self):
+        """The model for reference to the model admin."""
+        return self.admin_model
+
+    def get_custom_queryset(self, term=None):
+        return None
 
     def get_lookup_url(self):
         app_label = self.get_model()._meta.app_label
         model_name = self.get_model()._meta.model_name
+        admin_app_label = self.get_admin_model()._meta.app_label
+        admin_model_name = self.get_admin_model()._meta.model_name
         return (
-            reverse("tomselect_filter:lookup")
-            + f"?model={app_label}.{model_name}&field={self.parameter_name}"
+            reverse("tomselect_filter:lookup") + f"?model={app_label}.{model_name}"
+            f"&admin_model={admin_app_label}.{admin_model_name}"
+            f"&field={self.parameter_name}"
         )

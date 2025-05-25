@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DefaultUserAdmin
 from django.contrib.auth.models import User
+from django.http import JsonResponse
 from django.utils.translation import gettext_lazy as _
 
 from tomselect_filter.filters import TomSelectListFilter
@@ -33,6 +34,16 @@ class ItemProductFilter(TomSelectListFilter):
     def get_model(self):
         return Product
 
+    def get_admin_model(self):
+        return Item
+
+    def get_custom_queryset(self, term=None):
+        """Demo use of a fully custom queryset."""
+        qs = Product.objects.filter(id=1)
+        return JsonResponse(
+            [{"value": obj.id, "label": obj.name} for obj in qs], safe=False
+        )
+
 
 class InventoryProductFilter(TomSelectListFilter):
     def get_title(self):
@@ -62,7 +73,7 @@ class ItemAdmin(admin.ModelAdmin):
     search_fields = ["name"]
 
     list_filter = [
-        ("product__pk", ItemProductFilter),
+        ("product__id", ItemProductFilter),
     ]
 
 
