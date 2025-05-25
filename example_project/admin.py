@@ -56,11 +56,6 @@ class ProductAdmin(admin.ModelAdmin):
     ]
     search_fields = ["name"]
 
-    def lookup_allowed(self, lookup, value, request=None):
-        if lookup.startswith("inventory__products__id"):
-            return True
-        return super().lookup_allowed(lookup, value)
-
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
