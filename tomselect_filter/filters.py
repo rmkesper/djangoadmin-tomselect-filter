@@ -1,4 +1,6 @@
 from django.contrib.admin.filters import FieldListFilter
+from django.db.models import QuerySet
+from django.http import JsonResponse
 from django.urls import reverse
 
 
@@ -11,6 +13,7 @@ class TomSelectListFilter(FieldListFilter):
         self.model = model
         self.parameter_name = field_path
         self.admin_model = model
+        self.request = request
         self.title = (
             field.verbose_name.title() if getattr(field, "verbose_name", None) else ""
         )
@@ -33,7 +36,24 @@ class TomSelectListFilter(FieldListFilter):
         """The model for reference to the model admin."""
         return self.admin_model
 
-    def get_custom_queryset(self, term=None):
+    def get_custom_queryset(
+        self, term=None, queryset=None, admin_query: str | None = None, *args, **kwargs
+    ) -> JsonResponse:
+        """
+        Override the default queryset handling if needed.
+
+        Either use extend queryset OR custom queryset!
+        """
+        return None
+
+    def get_extend_queryset(
+        self, term=None, queryset=None, admin_query: str | None = None, *args, **kwargs
+    ) -> QuerySet:
+        """
+        Extend the default queryset if needed.
+
+        Either use extend queryset OR custom queryset!
+        """
         return None
 
     def get_lookup_url(self):

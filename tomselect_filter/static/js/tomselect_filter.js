@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
       create: false,
       plugins: ['remove_button'],
       load: function (query, callback) {
-        const fullUrl = `${url}&q=${encodeURIComponent(query)}`;
+        const fullUrl = `${url}&q=${encodeURIComponent(query)}&query=${encodeURIComponent(window.location.search)}`;
         fetch(fullUrl)
           .then((res) => res.json())
           .then((json) => callback(json))
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     if (initialValues.length > 0) {
       const url = select.input.getAttribute('data-url');
-      fetch(`${url}&q=${initialValues.join(',')}`)
+      fetch(`${url}&q=${initialValues.join(',')}&query=${encodeURIComponent(window.location.search)}`)
         .then(res => res.json())
         .then(data => {
           data.forEach(item => {

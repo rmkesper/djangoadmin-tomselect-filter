@@ -1,10 +1,27 @@
 [
 {
+  "model": "example_project.accountingyear",
+  "pk": 1,
+  "fields": {
+    "name": "Default Year",
+    "is_default": true
+  }
+},
+{
+  "model": "example_project.accountingyear",
+  "pk": 2,
+  "fields": {
+    "name": "Other Year",
+    "is_default": false
+  }
+},
+{
   "model": "example_project.product",
   "pk": 1,
   "fields": {
     "name": "Product 1",
-    "category": "Cat. 1"
+    "category": "Cat. 1",
+    "accounting_year": 1
   }
 },
 {
@@ -12,7 +29,8 @@
   "pk": 2,
   "fields": {
     "name": "Product 2",
-    "category": "Cat. 1"
+    "category": "Cat. 1",
+    "accounting_year": 1
   }
 },
 {
@@ -20,7 +38,26 @@
   "pk": 3,
   "fields": {
     "name": "Product 3",
-    "category": "Cat. 2"
+    "category": "Cat. 2",
+    "accounting_year": 1
+  }
+},
+{
+  "model": "example_project.product",
+  "pk": 4,
+  "fields": {
+    "name": "Product I",
+    "category": "Cat. I",
+    "accounting_year": 2
+  }
+},
+{
+  "model": "example_project.product",
+  "pk": 5,
+  "fields": {
+    "name": "Product II",
+    "category": "Cat. II",
+    "accounting_year": 2
   }
 },
 {
@@ -28,7 +65,8 @@
   "pk": 1,
   "fields": {
     "name": "Item 1",
-    "product": 1
+    "product": 1,
+    "accounting_year": 1
   }
 },
 {
@@ -36,7 +74,35 @@
   "pk": 2,
   "fields": {
     "name": "Item 2",
-    "product": 3
+    "product": 3,
+    "accounting_year": 1
+  }
+},
+{
+  "model": "example_project.item",
+  "pk": 2,
+  "fields": {
+    "name": "Item I",
+    "product": 4,
+    "accounting_year": 2
+  }
+},
+{
+  "model": "example_project.item",
+  "pk": 3,
+  "fields": {
+    "name": "Item II",
+    "product": 5,
+    "accounting_year": 2
+  }
+},
+{
+  "model": "example_project.item",
+  "pk": 4,
+  "fields": {
+    "name": "Item III",
+    "product": 4,
+    "accounting_year": 2
   }
 },
 {
@@ -44,6 +110,7 @@
   "pk": 1,
   "fields": {
     "name": "All",
+    "accounting_year": 1,
     "products": [
       1,
       2,
@@ -56,6 +123,7 @@
   "pk": 2,
   "fields": {
     "name": "Some",
+    "accounting_year": 1,
     "products": [
       1,
       2
@@ -67,8 +135,21 @@
   "pk": 3,
   "fields": {
     "name": "One",
+    "accounting_year": 1,
     "products": [
       3
+    ]
+  }
+},
+{
+  "model": "example_project.inventory",
+  "pk": 4,
+  "fields": {
+    "name": "First",
+    "accounting_year": 2,
+    "products": [
+      4,
+      5
     ]
   }
 }

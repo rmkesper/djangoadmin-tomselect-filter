@@ -9,9 +9,10 @@ from django.http import JsonResponse
 
 @staff_member_required
 def lookup_view(request):
-    custom_params = {"model", "field", "q", "admin_model"}
+    custom_params = {"model", "field", "q", "admin_model", "query"}
     model_str = request.GET.get("model")
     admin_model_str = request.GET.get("admin_model")
+    admin_query_str = request.GET.get("query", "")
     field = request.GET.get("field")
     q = request.GET.get("q", "")
 
@@ -65,19 +66,34 @@ def lookup_view(request):
         admin_model_admin.search_help_text,
     )
 
+    queryset = None
     for filter_spec in cl.filter_specs:
         if getattr(filter_spec, "parameter_name", None) == field:
             if hasattr(filter_spec, "get_custom_queryset"):
-                response = filter_spec.get_custom_queryset(q)
+                response = filter_spec.get_custom_queryset(
+                    term=q,
+                    queryset=cl.get_queryset(request),
+                    admin_query=admin_query_str,
+                )
                 if response is not None and isinstance(response, JsonResponse):
                     return response
+            if hasattr(filter_spec, "get_extend_queryset"):
+                queryset_ = filter_spec.get_extend_queryset(
+                    term=q,
+                    queryset=cl.get_queryset(request),
+                    admin_query=admin_query_str,
+                )
+                if queryset_ is not None:
+                    queryset = queryset_
 
-    # default query handling by parameter name
-    queryset = (
-        model.objects.all()
-        if is_pk_field
-        else model.objects.values_list(field, flat=True).distinct()
-    )
+    if not queryset:
+        # default query handling by parameter name
+        queryset = (
+            model.objects.all()
+            if is_pk_field
+            else model.objects.values_list(field, flat=True).distinct()
+        )
+
     filter_spec = "" if is_pk_field else "__icontains"
     if q:
         filter_set = Q()
