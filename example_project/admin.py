@@ -22,16 +22,13 @@ class InventoryFilter(TomSelectListFilter):
     def get_title(self):
         return _("By Inventory")
 
-    def get_mode(self):
-        return "pk__in"
+    def get_model(self):
+        return Inventory
 
 
 class ItemProductFilter(TomSelectListFilter):
     def get_title(self):
         return _("By Products")
-
-    def get_mode(self):
-        return "pk"
 
     def get_model(self):
         return Product
@@ -40,9 +37,6 @@ class ItemProductFilter(TomSelectListFilter):
 class InventoryProductFilter(TomSelectListFilter):
     def get_title(self):
         return _("By Products")
-
-    def get_mode(self):
-        return "pk"
 
     def get_model(self):
         return Product
@@ -58,9 +52,14 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = [
         ("category", CategoryFilter),
         ("items__name", ItemFilter),
-        ("inventory__products__id", InventoryFilter),
+        ("inventories__id", InventoryFilter),
     ]
     search_fields = ["name"]
+
+    def lookup_allowed(self, lookup, value, request=None):
+        if lookup.startswith("inventory__products__id"):
+            return True
+        return super().lookup_allowed(lookup, value)
 
 
 @admin.register(Item)
@@ -80,7 +79,7 @@ class InventoryAdmin(admin.ModelAdmin):
     ]
 
     list_filter = [
-        ("products__pk", InventoryProductFilter),
+        ("products__id", InventoryProductFilter),
     ]
 
 

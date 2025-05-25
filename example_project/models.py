@@ -27,7 +27,7 @@ class Inventory(models.Model):
     name = models.CharField(max_length=255)
     products = models.ManyToManyField(
         to=Product,
-        related_name="inventory",
+        related_name="inventories",
     )
 
     def __str__(self):

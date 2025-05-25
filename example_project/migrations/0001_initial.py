@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
                 (
                     "products",
                     models.ManyToManyField(
-                        related_name="inventory", to="example_project.product"
+                        related_name="inventories", to="example_project.product"
                     ),
                 ),
             ],
