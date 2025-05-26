@@ -1,5 +1,6 @@
 from urllib.parse import parse_qs, urlparse
 
+from django.conf import settings
 from django.contrib.admin.filters import FieldListFilter
 from django.core.exceptions import FieldError
 from django.db.models import Q, QuerySet
@@ -9,6 +10,8 @@ from django.urls import reverse
 
 class TomSelectListFilter(FieldListFilter):
     template = "admin/filters/tomselect_filter.html"
+
+    stacked_filters = getattr(settings, "DJANGO_TOMSELECT_FILTERS_STACKED", False)
 
     def __init__(self, field, request, params, model, model_admin, field_path):
         self.mode = "icontains"
@@ -59,6 +62,9 @@ class TomSelectListFilter(FieldListFilter):
         options in the related django admin view. either use super().get_extend_queryset(...)
         to maintain this or override if needed.
         """
+        if not self.stacked_filters:
+            return queryset
+
         if isinstance(admin_query, str) and queryset:
             query_string = urlparse(admin_query).query
             params = parse_qs(query_string)
