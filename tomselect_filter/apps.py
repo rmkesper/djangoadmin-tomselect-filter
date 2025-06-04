@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class RegistrationsConfig(AppConfig):
+class TomSelectFilterConfig(AppConfig):
     name = "tomselect_filter"
